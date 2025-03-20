@@ -16,8 +16,8 @@ db_config = {
 }
 
 def connect_to_mysql():
-    retries = 10  # Increase the number of retries
-    delay = 10  # Increase the delay between retries (in seconds)
+    retries = 10  
+    delay = 10 
     for i in range(retries):
         try:
             connection = mysql.connector.connect(**db_config)

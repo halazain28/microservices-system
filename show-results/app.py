@@ -12,10 +12,6 @@ collection = db.results
 
 @app.route('/results', methods=['GET'])
 def show_results():
-    # Validate credentials with authentication service
-    # (Implementation omitted for brevity)
-    
-    # Fetch results from MongoDB
     results = list(collection.find({}, {'_id': 0}))
     return jsonify(results), 200
 
