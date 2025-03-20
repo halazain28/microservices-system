@@ -16,10 +16,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Add this step to check Docker version and Docker Compose version
       - name: Set up Docker
         run: |
           docker --version
+          # Install Docker Compose
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
       - name: Set up Python
@@ -42,6 +44,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Wait for MySQL and MongoDB
+        run: |
+          echo "Waiting for MySQL and MongoDB to start"
+          sudo docker-compose up -d mysql-db mongo-db
+          sleep 30  # Wait for databases to be fully ready
+
       - name: Deploy Containers
         run: |
           sudo docker-compose up -d --build
