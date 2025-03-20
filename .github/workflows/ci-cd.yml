@@ -46,12 +46,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for MySQL and MongoDB
+      - name: Wait for MySQL and MongoDB to be ready
         run: |
-          echo "Waiting for MySQL and MongoDB to start"
+          echo "Starting MySQL and MongoDB..."
           sudo docker-compose up -d mysql-db mongo-db
-          sleep 30  # Wait for databases to be fully ready
+
+          # Wait for MySQL to be ready
+          echo "Waiting for MySQL to start..."
+          until sudo docker exec mysql-db mysqladmin --user=root --password=root --host="localhost" --silent ping; do
+            echo "MySQL is not ready, waiting..."
+            sleep 5
+          done
+          echo "MySQL is ready!"
+
+          # Wait for MongoDB to be ready
+          echo "Waiting for MongoDB to start..."
+          until sudo docker exec mongo-db mongo --eval "print('MongoDB is ready')" --quiet; do
+            echo "MongoDB is not ready, waiting..."
+            sleep 5
+          done
+          echo "MongoDB is ready!"
 
       - name: Deploy Containers
         run: |
+          echo "Deploying containers..."
           sudo docker-compose up -d --build
