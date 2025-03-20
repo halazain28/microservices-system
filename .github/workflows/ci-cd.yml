@@ -1,0 +1,43 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          pip install -r enter-data/requirements.txt
+          pip install -r show-results/requirements.txt
+          pip install -r authentication-service/requirements.txt
+          pip install -r analytics-service/requirements.txt
+
+      - name: Run Tests
+        run: echo "Run your tests here"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Containers
+        run: |
+          echo "Deploying using Docker Compose"
+          docker-compose up -d --build
+
