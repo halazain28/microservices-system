@@ -16,6 +16,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # Add this step to check Docker version and Docker Compose version
+      - name: Set up Docker
+        run: |
+          docker --version
+          docker-compose --version
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -38,6 +44,4 @@ jobs:
     steps:
       - name: Deploy Containers
         run: |
-          echo "Deploying using Docker Compose"
-          docker-compose up -d --build
-
+          sudo docker-compose up -d --build
