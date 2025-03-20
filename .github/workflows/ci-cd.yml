@@ -78,5 +78,5 @@ jobs:
 
       - name: Verify deployment (optional)
         run: |
-          curl -s http://localhost:5000/enter # Test your API here
-          curl -s http://localhost:5001/results # Test the results API
+          curl -s http://localhost:5000/enter
+          curl -s http://localhost:5001/results 
